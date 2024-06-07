@@ -1,0 +1,32 @@
+.sectionWrapper{
+    margin-top:10vh;
+    margin-bottom: 10vh;
+    background-color: whitesmoke;
+    height: 50vh;
+    width:80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sectionWrapper input{
+    cursor: pointer;
+}
+
+.mybut{
+    cursor: pointer;
+}
+
+.chooseFile{
+    cursor: pointer;
+}
+
+.msg{
+    margin-left:10vw;
+}
+
+.previewImage {
+    width:10vh;
+    height:10vh;
+    margin-right: 10vw;
+}

@@ -10,11 +10,15 @@ function LoginSuccess() {
         const params = new URLSearchParams(hash);
         const accessToken = params.get('access_token');
         const idToken = params.get('id_token');
+        const expiresIn = params.get('expires_in');
 
         if (accessToken && idToken) {
+            const expiryTime = new Date().getTime() + (parseInt(expiresIn!, 10) * 1000);
             sessionStorage.setItem('accessToken', accessToken);
             sessionStorage.setItem('idToken', idToken);
             sessionStorage.setItem('isAuth', 'true');
+            sessionStorage.setItem('expiryTime', expiryTime.toString());
+
             navigate('/');
         }
     }, [])

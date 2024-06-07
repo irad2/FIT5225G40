@@ -16,13 +16,15 @@ THUMBNAIL_WIDTH = 100
 def lambda_handler(event, context):
     # Parse the incoming event data
     request_data = json.loads(event['body'])
-    username = request_data['username']
     original_filename = request_data['name']
+    _, file_extension = os.path.splitext(original_filename)
     image_base64 = request_data['file']
+    username = event['requestContext']['authorizer']['claims']['email']
+    print(f"email: {username}")
     
     # Process the image and generate S3 keys
     unique_id = uuid.uuid4().hex
-    standard_image_key, resized_image_key = generate_s3_keys(username, original_filename, unique_id)
+    standard_image_key, resized_image_key = generate_s3_keys(username, file_extension, unique_id)
     
     # Decode and process the image
     image_data = decode_base64_image(image_base64)
@@ -30,21 +32,40 @@ def lambda_handler(event, context):
     thumbnail_image = create_thumbnail(original_image, THUMBNAIL_WIDTH)
     
     # Encode images to bytes
-    thumbnail_bytes = encode_image_to_bytes(thumbnail_image, original_filename)
+    thumbnail_bytes = encode_image_to_bytes(thumbnail_image, file_extension)
+    
+    def get_mime_type(file_extension):
+        """Return the correct MIME type for a given file extension."""
+        mime_types = {
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.gif': 'image/gif',
+            '.bmp': 'image/bmp',
+            # Add more file types as needed
+        }
+        return mime_types.get(file_extension.lower(), 'application/octet-stream')
+
+    # Usage in your lambda_handler
+    content_type = get_mime_type(file_extension)
     
     # Upload images to S3
-    upload_image_to_s3(S3_BUCKET, standard_image_key, image_data, 'image/jpeg')
-    upload_image_to_s3(S3_BUCKET, resized_image_key, thumbnail_bytes, 'image/jpeg')
+    upload_image_to_s3(S3_BUCKET, standard_image_key, image_data, content_type)
+    upload_image_to_s3(S3_BUCKET, resized_image_key, thumbnail_bytes, content_type)
     
     # Return a successful response
     return {
         'statusCode': 200,
+        'headers': {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*"
+        },
         'body': json.dumps("Image uploaded successfully")
     }
 
-def generate_s3_keys(username, original_filename, unique_id):
+def generate_s3_keys(username, file_extension, unique_id):
     """Generate S3 object keys for the original and resized images."""
-    _, file_extension = os.path.splitext(original_filename)
     standard_image_key = f"{STANDARD_FOLDER}{username}/{unique_id}{file_extension}"
     resized_image_key = f"{RESIZED_FOLDER}{username}/{unique_id}{file_extension}"
     return standard_image_key, resized_image_key
@@ -63,9 +84,8 @@ def create_thumbnail(image, width):
     height = int(image.shape[0] * (width / image.shape[1]))
     return cv2.resize(image, (width, height), interpolation=cv2.INTER_AREA)
 
-def encode_image_to_bytes(image, original_filename):
+def encode_image_to_bytes(image, file_extension):
     """Encode an image to bytes."""
-    _, file_extension = os.path.splitext(original_filename)
     _, buffer = cv2.imencode(file_extension, image)
     return buffer.tobytes()
 
