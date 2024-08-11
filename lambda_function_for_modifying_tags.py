@@ -29,17 +29,32 @@ def lambda_handler(event, context):
             else:
                 return {
                     'statusCode': 400,
+                    'headers': {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "*",
+                        "Access-Control-Allow-Headers": "*"
+                    },
                     'body': json.dumps('Invalid type. Use 1 for add and 0 for remove.')
                 }
         
         return {
             'statusCode': 200,
+            'headers': {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "*",
+                "Access-Control-Allow-Headers": "*"
+            },
             'body': json.dumps('Tags modified successfully.')
         }
     
     except Exception as e:
         return {
             'statusCode': 500,
+            'headers': {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "*",
+                "Access-Control-Allow-Headers": "*"
+            },
             'body': json.dumps(f"Error: {str(e)}")
         }
 

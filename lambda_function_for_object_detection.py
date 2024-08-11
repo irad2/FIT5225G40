@@ -26,6 +26,7 @@ def lambda_handler(event, context):
         key = record['s3']['object']['key']
         
         decoded_key = urllib.parse.unquote_plus(key)
+        print(f"decoded_key, {decoded_key}")
         
         # Extract username, image name and image id
         parts = decoded_key.split('/')
@@ -48,7 +49,7 @@ def lambda_handler(event, context):
         )
         print(f"Inserted item with imageID: {image_id}")
         
-        image = s3_client.get_object(Bucket=bucket, Key=key)
+        image = s3_client.get_object(Bucket=bucket, Key=decoded_key)
         tags = od.detect_image_bytes(image["Body"].read())
         grouped_tags = group_tags(tags)
         print(f"tags detected: {grouped_tags}")
@@ -66,7 +67,7 @@ def lambda_handler(event, context):
                 print(f"Inserted tag: {tag}")
             except Exception as e:
                 # Tag already exists, skip insertion
-                print(f"Tag already exists or another error occurred: {tag} - {str(e)}")
+                print(f"Tag already exists in tag table: {tag}")
                 
             # Insert relationship into mid_table
             mid_table.put_item(

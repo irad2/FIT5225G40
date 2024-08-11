@@ -12,6 +12,11 @@ def lambda_handler(event, context):
     if not thumbnail_url:
         return {
             'statusCode': 400,
+            'headers': {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "*",
+                "Access-Control-Allow-Headers": "*"
+            },
             'body': json.dumps({'message': 'Invalid request: thumbnail_url is required'})
         }
     
@@ -23,6 +28,11 @@ def lambda_handler(event, context):
     if 'Items' not in response or not response['Items']:
         return {
             'statusCode': 404,
+            'headers': {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "*",
+                "Access-Control-Allow-Headers": "*"
+            },
             'body': json.dumps({'message': 'No image found for the given thumbnail URL'})
         }
     
@@ -31,10 +41,20 @@ def lambda_handler(event, context):
     if not standard_image_url:
         return {
             'statusCode': 404,
+            'headers': {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "*",
+                "Access-Control-Allow-Headers": "*"
+            },
             'body': json.dumps({'message': 'Standard image URL not found for the given thumbnail URL'})
         }
     
     return {
         'statusCode': 200,
+        'headers': {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*"
+        },
         'body': json.dumps({'standardImageUrl': standard_image_url})
     }

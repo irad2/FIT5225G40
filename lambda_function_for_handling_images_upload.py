@@ -52,6 +52,8 @@ def lambda_handler(event, context):
     # Upload images to S3
     upload_image_to_s3(S3_BUCKET, standard_image_key, image_data, content_type)
     upload_image_to_s3(S3_BUCKET, resized_image_key, thumbnail_bytes, content_type)
+    print(f"standard_image_key: {standard_image_key}")
+    print(f"resized_image_key: {resized_image_key}")
     
     # Return a successful response
     return {

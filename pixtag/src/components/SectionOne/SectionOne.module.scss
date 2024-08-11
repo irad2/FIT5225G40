@@ -1,32 +1,51 @@
-.sectionWrapper{
-    margin-top:10vh;
+.sectionWrapper {
+    margin-top: 10vh;
     margin-bottom: 10vh;
-    background-color: whitesmoke;
     height: 50vh;
-    width:80%;
+    width: 80%;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: pink;
 }
 
-.sectionWrapper input{
+.sectionWrapper input {
     cursor: pointer;
 }
 
-.mybut{
+.mybut {
     cursor: pointer;
 }
 
-.chooseFile{
+.chooseFile {
     cursor: pointer;
-}
-
-.msg{
-    margin-left:10vw;
 }
 
 .previewImage {
-    width:10vh;
-    height:10vh;
-    margin-right: 10vw;
+    width: 10vh;
+    height: 10vh;
+}
+
+.title {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
+}
+
+.contentWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 80%;
+    width: 80%;
+    padding: 20px;
+    background-color: white;
 }

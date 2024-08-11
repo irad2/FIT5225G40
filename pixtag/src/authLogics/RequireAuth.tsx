@@ -10,9 +10,6 @@ const RequireAuth: React.FC<Props> = ({ children }) => {
 
     useEffect(() => {
         const currentTime = new Date().getTime();
-        console.log(expiryTime)
-        console.log(currentTime)
-        console.log(parseInt(expiryTime!, 10))
 
         if (!isAuth || (expiryTime && currentTime > parseInt(expiryTime, 10))) {
             // Clear session storage to ensure no stale tokens are kept

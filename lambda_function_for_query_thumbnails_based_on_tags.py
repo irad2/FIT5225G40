@@ -1,34 +1,47 @@
 import json
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
+from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
 img_table = dynamodb.Table("imagesTable")
 mid_table = dynamodb.Table("imageTagMiddleTable")
 
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return float(obj)
+        return super(DecimalEncoder, self).default(obj)
+
 def lambda_handler(event, context):
     body = json.loads(event['body'])
     required_tags = body.get('tags', {})
+    email = event['requestContext']['authorizer']['claims']['email']
     
-    # Find imageIDs that meet the tag requirements
+    # Find imageIDs that meet the tag and username requirements
     image_ids = find_images_by_tags(required_tags)
-    
-    if not image_ids:
-        return {
-            'statusCode': 404,
-            'body': json.dumps({'message': 'No images found matching the criteria'})
-        }
+    filtered_image_ids = filter_images_by_username(image_ids, email)
     
     # Retrieve thumbnail images from img_table
     thumbnail_images = []
-    for image_id in image_ids:
-        response = img_table.get_item(Key={'imageID': image_id})
-        if 'Item' in response:
-            thumbnail_images.append(response['Item']['thumbnailImageUrl'])
+    for image_id in filtered_image_ids:
+        response_img = img_table.get_item(Key={'imageID': image_id})
+        response_mid = fetch_mid_items(image_id)
+        print(f"response_mid: {response_mid}")
+        if 'Item' in response_img:
+            thumbnail_images.append({
+                "url": response_img['Item']['thumbnailImageUrl'],
+                "tags": response_mid
+            })
     
     return {
         'statusCode': 200,
-        'body': json.dumps(thumbnail_images)
+        'headers': {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*"
+        },
+        'body': json.dumps(thumbnail_images, cls=DecimalEncoder)
     }
 
 def find_images_by_tags(required_tags):
@@ -54,3 +67,19 @@ def find_images_by_tags(required_tags):
     print(f"final image_ids: {image_ids}")
     return image_ids
 
+def filter_images_by_username(image_ids, email):
+    filtered_image_ids = set()
+    
+    for image_id in image_ids:
+        response = img_table.get_item(Key={'imageID': image_id})
+        if 'Item' in response and response['Item'].get('username') == email:
+            filtered_image_ids.add(image_id)
+    
+    print(f"filtered_image_ids: {filtered_image_ids}")
+    return filtered_image_ids
+
+def fetch_mid_items(image_id):
+    response = mid_table.query(
+        KeyConditionExpression=Key('imageID').eq(image_id)
+    )
+    return response['Items']

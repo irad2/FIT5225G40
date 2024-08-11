@@ -44,8 +44,7 @@ function SectionOne() {
                     }
 
                     const responseData = await response.json();
-                    alert('API call successful: ' + JSON.stringify(responseData));
-                    setMsg("")
+                    setMsg("upload successfully.")
                 } catch (error) {
                     setMsg('Error sending API request:' + error)
                 }
@@ -59,11 +58,17 @@ function SectionOne() {
 
     return (
         <div className={styles.sectionWrapper}>
-            
-            <input type="file" accept="image/*" onChange={handleFileChange} />
-            {previewUrl && <img src={previewUrl} alt="Selected Preview" className={styles.previewImage} />}
-            <button className={styles.mybut} onClick={handleUploadClick}>Upload</button>
-            <div className={styles.msg}>{msg}</div>
+            <div className={styles.contentWrapper}>
+                <div className={styles.title}>
+                    Upload your image here.
+                </div>
+                <div className={styles.content}>
+                    <input type="file" accept="image/*" onChange={handleFileChange} />
+                    {previewUrl && <img src={previewUrl} alt="Selected Preview" className={styles.previewImage} />}
+                    <button className={styles.mybut} onClick={handleUploadClick}>Upload</button>
+                    <div className={styles.msg}>{msg}</div>
+                </div>
+            </div>
         </div>
     );
 }

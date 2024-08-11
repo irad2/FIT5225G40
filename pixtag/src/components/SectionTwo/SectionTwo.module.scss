@@ -1,0 +1,158 @@
+.sectionWrapper{
+    margin-top:10vh;
+    margin-bottom: 10vh;
+    background-color: palegoldenrod;
+    width:80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.inputArea{
+    margin-top: 3vh;
+    margin-bottom: 1.5vh;
+    width:80%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2vh;
+}
+
+.label {
+    margin-bottom: 1vh;
+    margin-top: 1vh;
+    font-size: 2rem;
+    font-family: 700;
+}
+
+.example{
+    margin-bottom: 1vh;
+}
+
+.myInput{
+    padding: 1vh; 
+}
+
+.myBut{
+    cursor: pointer;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+
+.searchResultWrapper{
+    margin-bottom: 2vh;
+    background-color: white;
+    width:80%;
+    padding: 2vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.thumbnailArea{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.thumbnailArea img{
+    margin: 1vh;
+}
+
+.previewArea{
+    padding: 3vh;
+    background-color: white;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 2vh;
+}
+
+.tabs{
+    margin-bottom: 2vh;
+}
+
+.tab{
+    border:none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.previewMsg{
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.selectAndEditArea{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.previewAndDeleteArea{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modificationBut,
+.deleteBut{
+    font-size: 1rem;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    background-color: green;
+    color:white;
+    margin-top: 10px;
+    transition: 0.1s;
+    border-radius: 10px;
+}
+
+.modificationBut:hover,
+.deleteBut:hover{
+    background-color: palegreen;
+    color:black;
+}
+
+.editThumbnailArea{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.editThumbnailArea img{
+    margin-right: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.editThumbnailArea img:hover{
+    transform: translateY(-10px);
+}
+
+.modes {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.tagModificationArea {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.editMsg {
+    font-size: 1rem;
+    color: blue;
+}

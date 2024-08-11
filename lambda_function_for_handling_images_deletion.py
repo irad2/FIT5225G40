@@ -22,8 +22,9 @@ def lambda_handler(event, context):
         key = parsed_url.path.lstrip('/')
 
         # Delete the image from S3
-        s3_client.delete_object(Bucket=bucket, Key=key)
-        print(f"Deleted from S3: {key}")
+        resize_key = 'resized_images/' + '/'.join(key.split('/')[1:])
+        s3_client.delete_object(Bucket=bucket, Key=resize_key)
+        print(f"Deleted from S3: {resize_key}")
         
         standard_key = 'standard_images/' + '/'.join(key.split('/')[1:])
         s3_client.delete_object(Bucket=bucket, Key=standard_key)
@@ -55,5 +56,10 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 200,
+        'headers': {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*"
+        },
         'body': json.dumps("Images and related data removed successfully")
     }

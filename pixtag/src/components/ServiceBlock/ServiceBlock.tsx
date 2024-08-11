@@ -3,10 +3,11 @@ import styles from "./ServiceBlock.module.scss"
 
 function ServiceBlock(props:{
     handleOnClick:()=>void,
-    words: string
+    words: string,
+    style: {}
 }) {
     return (
-        <div onClick={props.handleOnClick} className={styles.wrapper}>
+        <div style={props.style} onClick={props.handleOnClick} className={styles.wrapper}>
             {props.words}
         </div>
     );

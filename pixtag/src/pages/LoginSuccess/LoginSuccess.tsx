@@ -18,7 +18,6 @@ function LoginSuccess() {
             sessionStorage.setItem('idToken', idToken);
             sessionStorage.setItem('isAuth', 'true');
             sessionStorage.setItem('expiryTime', expiryTime.toString());
-
             navigate('/');
         }
     }, [])
